@@ -1,4 +1,4 @@
-# matter-exceptions
+# matter-task-queue
 
 **Table of Contents**
 
@@ -13,7 +13,7 @@ to the new library's name.
 ## Installation
 
 ```console
-pip install matter-exceptions
+pip install matter-task-queue
 ```
 
 ## Contributing

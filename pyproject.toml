@@ -1,12 +1,12 @@
 [project]
-name = "matter-library-template"
+name = "matter-task-queue"
 description = "A template for new Matter's library"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 keywords = []
 authors = [
-  { name = "Rômulo Jales", email = "romulo@thisismatter.com" },
+  { name = "Tomer Sasson", email = "tomer@thisismatter.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -16,24 +16,40 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["matter-exceptions==0.1.1"]
+dependencies = [
+    "matter-exceptions==1.0.1",
+    "kombu==5.2.4",
+    "celery[sqs]==5.2.7",
+]
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/Matter-Tech/matter-library-template#readme"
-Issues = "https://github.com/Matter-Tech/matter-library-template/issues"
-Source = "https://github.com/Matter-Tech/matter-library-template"
+Documentation = "https://github.com/Matter-Tech/matter-task-queue#readme"
+Issues = "https://github.com/Matter-Tech/matter-task-queue/issues"
+Source = "https://github.com/Matter-Tech/matter-task-queue"
+
+[project.optional-dependencies]
+sentry = [
+    "sentry-sdk==1.15.0",
+]
 
 [tool.hatch.version]
-path = "matter_library_template/__about__.py"
+path = "matter_task_queue/__about__.py"
 
 [tool.hatch.envs.default]
 dependencies = [
+    "matter-task-queue[sentry]",
     "pytest",
+    "pytest-asyncio",
     "pytest-cov",
+    "pytest-mock",
+    "pytest-celery",
+    "testcontainers[localstack]",
+    "requests",
     "black",
     "mypy",
-    "ruff"
+    "ruff",
+    "python-dotenv",
 ]
 
 [tool.hatch.envs.default.scripts]
@@ -51,7 +67,6 @@ fmt = [
 ]
 lint = [
   "style",
-  "typing",
 ]
 
 [tool.black]
@@ -61,12 +76,13 @@ line-length = 120
 [tool.ruff]
 target-version = "py310"
 line-length = 120
+ignore = ["E"]
 
 [tool.coverage.run]
 branch = true
 parallel = true
 omit = [
-    "matter_library_template/__about__.py",
+    "matter_task_queue/__about__.py",
 ]
 
 [tool.coverage.report]
@@ -80,3 +96,10 @@ fail_under=95
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:.*:",
+    "ignore:SelectableGroups dict interface is deprecated. Use select.:DeprecationWarning",
+]
