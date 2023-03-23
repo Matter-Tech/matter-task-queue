@@ -4,11 +4,6 @@
 __all__ = []
 
 
-from .utils import (
-    create_celery,
-    run_task,
-    run_task_async,
-    async_to_sync
-)
+from .utils import create_celery, run_task, run_task_async, async_to_sync
 
 from .base_task import BaseTask

@@ -16,9 +16,11 @@ def aws_container():
     yield localstack
     localstack.stop()
 
+
 @pytest.fixture(scope="session")
 def sqs_mock(aws_container):
     yield aws_container
+
 
 @pytest.fixture(scope="session")
 def mock_celery_broker(sqs_mock):
@@ -30,13 +32,14 @@ def mock_celery_broker(sqs_mock):
     os.environ["AWS_ACCESS_KEY_ID"] = "test"
 
     from matter_task_queue.config import Config
+
     Config.load_variables()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def celery_config(mock_celery_broker):
     from matter_task_queue.celery_config import build_celery_config
+
     celery_config = build_celery_config(create_dead_letter_queue=True)
 
     return celery_config
-

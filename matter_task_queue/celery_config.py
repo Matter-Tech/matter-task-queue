@@ -1,6 +1,3 @@
-### Celery Configuration ###
-
-
 import logging
 import re
 import boto3
@@ -8,13 +5,13 @@ import boto3
 from logging.handlers import RotatingFileHandler
 from kombu import Queue
 
-CELERY_DEFAULT_QUEUE = "high_priority_queue"
-CELERY_LOW_PRIORITY_QUEUE = "low_priority_queue"
-CELERY_DEAD_LETTER_QUEUE = "dead_letter_queue"
-
 from celery.signals import after_setup_logger
 
 from .config import Config
+
+CELERY_DEFAULT_QUEUE = "high_priority_queue"
+CELERY_LOW_PRIORITY_QUEUE = "low_priority_queue"
+CELERY_DEAD_LETTER_QUEUE = "dead_letter_queue"
 
 
 @after_setup_logger.connect
@@ -25,9 +22,7 @@ def setup_task_logger(logger, *args, **kwargs):
 def get_sqs_attributes():
     """configure SQS specific attributes."""
     if Config.IS_ENV_LOCAL_OR_TEST:
-        sqs = boto3.client(
-            "sqs", region_name=Config.AWS_REGION, endpoint_url=Config.AWS_ENDPOINT_URL
-        )
+        sqs = boto3.client("sqs", region_name=Config.AWS_REGION, endpoint_url=Config.AWS_ENDPOINT_URL)
     else:
         sqs = boto3.client("sqs", region_name=Config.AWS_REGION)
 
@@ -47,9 +42,7 @@ def get_sqs_attributes():
     account_number, queue_name = match.groups()
     queue_arn = f"arn:aws:sqs:{Config.AWS_REGION}:{account_number}:{queue_name}"
 
-    return {
-        "RedrivePolicy": f'{{"deadLetterTargetArn": "{queue_arn}", "maxReceiveCount": "10"}}'
-    }
+    return {"RedrivePolicy": f'{{"deadLetterTargetArn": "{queue_arn}", "maxReceiveCount": "10"}}'}
 
 
 def route_task(name, args, kwargs, options, task=None, **kw):
@@ -72,11 +65,7 @@ def setup_celery_logger(logger):
     logger.addHandler(file)
 
     for handler in logger.handlers:
-        handler.setFormatter(
-            TaskFormatter(
-                "[%(asctime)s -%(task_name)s- %(name)s - %(levelname)s] %(message)s"
-            )
-        )
+        handler.setFormatter(TaskFormatter("[%(asctime)s -%(task_name)s- %(name)s - %(levelname)s] %(message)s"))
     return logger
 
 

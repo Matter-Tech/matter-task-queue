@@ -1,7 +1,7 @@
 import os
 
-class Config:
 
+class Config:
     def __init__(self):
         self.load_variables()
 
@@ -19,5 +19,6 @@ class Config:
 
         cls.AWS_ENDPOINT_URL = os.environ["AWS_ENDPOINT_URL"] if cls.ENV != "test" else os.getenv("AWS_ENDPOINT_URL")
         cls.CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"] if cls.ENV != "test" else os.getenv("CELERY_BROKER_URL")
+
 
 Config()

@@ -1,6 +1,4 @@
 import warnings
-warnings.filterwarnings('ignore', 'SelectableGroups dict interface')
-
 import logging
 import asyncio
 from celery import current_app as current_celery_app
@@ -8,9 +6,12 @@ from celery.signals import worker_process_init, worker_process_shutdown
 from .config import Config
 from .celery_config import build_celery_config, CELERY_BEAT_CONFIG
 
+warnings.filterwarnings("ignore", "SelectableGroups dict interface")
+
+
 try:
     loop = asyncio.get_running_loop()
-except RuntimeError as e:
+except RuntimeError:
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
@@ -65,17 +66,15 @@ def async_to_sync(func, *args, **kwargs):
 
 
 def create_celery(
-    task_module_paths: [str], celery_beat_schedule: dict | None, create_dead_letter_queue=True,
+    task_module_paths: [str],
+    celery_beat_schedule: dict | None,
+    create_dead_letter_queue=True,
 ):
     celery_app = current_celery_app
-    celery_app.conf.update(
-        build_celery_config(create_dead_letter_queue)
-    )
+    celery_app.conf.update(build_celery_config(create_dead_letter_queue))
     celery_app.conf.update(CELERY_BEAT_CONFIG)
     celery_app.conf.update(beat_schedule=celery_beat_schedule)
-    celery_app.autodiscover_tasks(
-        task_module_paths
-    )
+    celery_app.autodiscover_tasks(task_module_paths)
 
     return celery_app
 
@@ -89,7 +88,5 @@ def worker_process_init(**kwargs):
 
 @worker_process_shutdown.connect()
 def worker_process_shutdown(**kwargs):
-    logging.info(
-        f"Worker process [{kwargs['pid']}] shutdown... -> Exit Code: [{kwargs['exitcode']}]"
-    )
+    logging.info(f"Worker process [{kwargs['pid']}] shutdown... -> Exit Code: [{kwargs['exitcode']}]")
     logging.info("Done worker process shutdown.")

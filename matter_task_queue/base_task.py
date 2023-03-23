@@ -14,15 +14,12 @@ class BaseRequest(Request):
             logging.error(f"A hard timeout was enforced for task {self.task.name}")
 
     def on_failure(self, exc_info, send_failed_event=True, return_ok=False):
-        super().on_failure(
-            exc_info, send_failed_event=send_failed_event, return_ok=return_ok
-        )
+        super().on_failure(exc_info, send_failed_event=send_failed_event, return_ok=return_ok)
         if isinstance(exc_info.exception, WorkerLostError):
-            logging.error(
-                f"Failure detected for task {self.task.name}: {str(exc_info.exception)}"
-            )
+            logging.error(f"Failure detected for task {self.task.name}: {str(exc_info.exception)}")
             if Config.SENTRY_DSN and not Config.IS_ENV_LOCAL_OR_TEST:
                 from sentry_sdk import capture_exception
+
                 capture_exception(exc_info.exception)
 
 
@@ -33,4 +30,5 @@ class BaseTask(Task):
         logging.error(f"Error Occurred: {str(exc)}")
         if Config.SENTRY_DSN and not Config.IS_ENV_LOCAL_OR_TEST:
             from sentry_sdk import capture_exception
+
             capture_exception(exc)

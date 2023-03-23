@@ -51,4 +51,3 @@ async def test_run_task_async(celery_app, celery_worker):
     await run_task_async(foo)
     assert V.x == 10
     assert V.y == 10
-

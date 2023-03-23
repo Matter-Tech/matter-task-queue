@@ -7,7 +7,7 @@ from urllib3 import Retry
 class SqsMock(LocalStackContainer):
     def __init__(self):
         super(SqsMock, self).__init__("localstack/localstack:latest-amd64")
-        self.get_container_host_ip = lambda: f"localhost"
+        self.get_container_host_ip = lambda: "localhost"
 
         # Include any AWS services we wish to test within this integration test component.
         self.with_services("sqs")
