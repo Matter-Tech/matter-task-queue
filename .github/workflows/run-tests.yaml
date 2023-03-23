@@ -4,5 +4,9 @@ on: push
 
 jobs:
   run-test:
-    name: Run tests
-    uses: Matter-Tech/matter-library-actions/.github/workflows/run-tests.yaml@v1
+    steps:
+      - name: Installing locally dependencies
+        run: |
+          sudo apt update && sudo apt-get install -f libcurl4-openssl-dev libssl-dev
+      - name: Run tests
+        uses: Matter-Tech/matter-library-actions/.github/workflows/run-tests.yaml@v1
