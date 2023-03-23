@@ -30,7 +30,7 @@ class BaseTask(Task):
     Request = BaseRequest
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
+        logging.error(f"Error Occurred: {str(exc)}")
         if Config.SENTRY_DSN and not Config.IS_ENV_LOCAL_OR_TEST:
             from sentry_sdk import capture_exception
             capture_exception(exc)
-        logging.error(f"Error Occurred: {exc}")

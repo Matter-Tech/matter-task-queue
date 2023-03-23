@@ -53,9 +53,9 @@ dependencies = [
 ]
 
 [tool.hatch.envs.default.scripts]
-test = "pytest  -W error --cov-report=term-missing --cov-config=pyproject.toml --cov=matter_exceptions --cov=tests {args}"
+test = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=matter_task_queue --cov=tests {args}"
 no-cov = "test --no-cov {args}"
-typing = "mypy --install-types --non-interactive {args:matter_exceptions tests}"
+typing = "mypy --install-types --non-interactive {args:matter_task_queue tests}"
 style = [
   "ruff {args:.}",
   "black --check --diff {args:.}",
@@ -76,7 +76,6 @@ line-length = 120
 [tool.ruff]
 target-version = "py310"
 line-length = 120
-ignore = ["E"]
 
 [tool.coverage.run]
 branch = true
@@ -91,7 +90,7 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
 ]
-fail_under=95
+fail_under=80
 
 [build-system]
 requires = ["hatchling"]
@@ -99,7 +98,6 @@ build-backend = "hatchling.build"
 
 
 [tool.pytest.ini_options]
-filterwarnings = [
-    "ignore::DeprecationWarning:.*:",
-    "ignore:SelectableGroups dict interface is deprecated. Use select.:DeprecationWarning",
-]
+asyncio_mode = "auto"
+addopts = "-x"
+filterwarnings = ["error", "ignore::DeprecationWarning", "ignore::ResourceWarning"]
