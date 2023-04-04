@@ -30,7 +30,6 @@ CELERY_BROKER_URL=your-broker-url
 CELERY_LOG_LEVEL=info
 CELERY_LOG_FILE_PATH=/tmp/celery.txt
 AWS_REGION=eu-central-1
-AWS_ENDPOINT_URL=your-aws-enspoint
 SENTRY_DSN=your-sentry-dsn
 ```
 

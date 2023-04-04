@@ -67,7 +67,7 @@ def async_to_sync(func, *args, **kwargs):
 
 def create_celery(
     task_module_paths: [str],
-    celery_beat_schedule: dict | None,
+    celery_beat_schedule: dict=None,
     create_dead_letter_queue=True,
 ):
     celery_app = current_celery_app
