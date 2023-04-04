@@ -9,9 +9,9 @@ from celery.signals import after_setup_logger
 
 from .config import Config
 
-CELERY_DEFAULT_QUEUE = "high_priority_queue"
-CELERY_LOW_PRIORITY_QUEUE = "low_priority_queue"
-CELERY_DEAD_LETTER_QUEUE = "dead_letter_queue"
+CELERY_DEFAULT_QUEUE = f"{Config.INSTANCE_NAME.lower().replace('-','_')}_high_priority_queue"
+CELERY_LOW_PRIORITY_QUEUE = f"{Config.INSTANCE_NAME.lower().replace('-','_')}_low_priority_queue"
+CELERY_DEAD_LETTER_QUEUE = f"{Config.INSTANCE_NAME.lower().replace('-','_')}_dead_letter_queue"
 
 
 @after_setup_logger.connect

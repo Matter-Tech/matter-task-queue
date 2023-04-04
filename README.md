@@ -23,7 +23,7 @@ pip install matter-task-queue
 
 Make sure that you have set the following ENV values:
 ```console
-ENV=test-or-local-or-development-or-production
+ENV=local (otherwise, test-or-development-or-production)
 DEBUG=false
 INSTANCE_NAME=your-webapp-name
 CELERY_BROKER_URL=your-broker-url
@@ -31,6 +31,16 @@ CELERY_LOG_LEVEL=info
 CELERY_LOG_FILE_PATH=/tmp/celery.txt
 AWS_REGION=eu-central-1
 SENTRY_DSN=your-sentry-dsn
+
+# For a local environment only:
+AWS_ENDPOINT_URL=http://localhost:9324
+```
+
+For a local environment only:
+Install and run a docker SQS Queue container:
+
+```console
+docker run -p 9324:9324 -p 9325:9325 softwaremill/elasticmq
 ```
 
 ## Usage
