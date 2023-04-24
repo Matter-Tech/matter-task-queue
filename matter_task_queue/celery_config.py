@@ -11,7 +11,6 @@ from .config import Config
 
 CELERY_DEFAULT_QUEUE = "high_priority_queue"
 CELERY_LOW_PRIORITY_QUEUE = "low_priority_queue"
-CELERY_DEAD_LETTER_QUEUE = "dead_letter_queue"
 
 
 @after_setup_logger.connect
@@ -26,10 +25,10 @@ def get_sqs_attributes():
     else:
         sqs = boto3.client("sqs", region_name=Config.AWS_REGION)
 
-    response = sqs.list_queues(QueueNamePrefix=CELERY_DEAD_LETTER_QUEUE)
+    response = sqs.list_queues(QueueNamePrefix=Config.CELERY_DEAD_LETTER_QUEUE)
     if len(response.get("QueueUrls", [])) == 0:
         response = sqs.create_queue(
-            QueueName=CELERY_DEAD_LETTER_QUEUE,
+            QueueName=Config.CELERY_DEAD_LETTER_QUEUE,
             Attributes={
                 "DelaySeconds": "60",
                 "MessageRetentionPeriod": "86400",  # 24h Retention
