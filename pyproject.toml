@@ -30,7 +30,7 @@ Source = "https://github.com/Matter-Tech/matter-task-queue"
 
 [project.optional-dependencies]
 sentry = [
-    "sentry-sdk==1.23.1",
+    "sentry-sdk==1.25.1",
 ]
 
 [tool.hatch.version]
