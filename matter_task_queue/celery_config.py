@@ -90,7 +90,7 @@ class TaskFormatter(logging.Formatter):
 
 def build_celery_config(create_dead_letter_queue: bool):
     sqs_attributes = get_sqs_attributes() if create_dead_letter_queue else {}
-    return {
+    celery_config = {
         "broker_url": Config.CELERY_BROKER_URL,
         "broker_transport_options": {
             "region": Config.AWS_REGION,
@@ -104,12 +104,17 @@ def build_celery_config(create_dead_letter_queue: bool):
         ),
         "task_routes": (route_task,),
         "worker_pool_restarts": True,
-        "task_ignore_result": True,
+        "task_ignore_result": True if not Config.CELERY_RESULT_BACKEND_URL else False,
         "worker_hijack_root_logger": False,
         "worker_enable_remote_control": False,
         "worker_send_task_events": False,
         "task_always_eager": Config.DEBUG and Config.IS_ENV_LOCAL_OR_TEST,
     }
+
+    if Config.CELERY_RESULT_BACKEND_URL:
+        celery_config["result_backend"] = Config.CELERY_RESULT_BACKEND_URL
+
+    return celery_config
 
 
 CELERY_BEAT_CONFIG = {
