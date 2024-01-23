@@ -19,6 +19,7 @@ class Config:
         cls.SENTRY_DSN = os.getenv("SENTRY_DSN")
         cls.AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
         cls.CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"] if cls.ENV != "test" else os.getenv("CELERY_BROKER_URL")
+        cls.CELERY_RESULT_BACKEND_URL = os.getenv("CELERY_RESULT_BACKEND_URL")
 
 
 Config()
