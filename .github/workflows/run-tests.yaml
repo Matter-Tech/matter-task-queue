@@ -5,4 +5,4 @@ on: push
 jobs:
   run-test:
     name: Run tests
-    uses: Matter-Tech/matter-library-actions/.github/workflows/run-tests.yaml@v1
+    uses: Matter-Tech/matter-library-actions/.github/workflows/run-tests.yaml@v2
