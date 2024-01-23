@@ -19,7 +19,7 @@ classifiers = [
 dependencies = [
     "matter-exceptions>=1.1.0",
     "kombu==5.3.1",
-    "celery[sqs]==5.2.7",
+    "celery[sqs]==5.3.6",
 ]
 dynamic = ["version"]
 
