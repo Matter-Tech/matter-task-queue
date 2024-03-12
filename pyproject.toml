@@ -18,8 +18,8 @@ classifiers = [
 ]
 dependencies = [
     "matter-exceptions>=1.1.0",
-    "kombu==5.2.4",
-    "celery[sqs]==5.2.7",
+    "kombu>=5.2.4",
+    "celery[sqs]>=5.2.7",
 ]
 dynamic = ["version"]
 
@@ -30,7 +30,7 @@ Source = "https://github.com/Matter-Tech/matter-task-queue"
 
 [project.optional-dependencies]
 sentry = [
-    "sentry-sdk==1.23.1",
+    "sentry-sdk>=1.23.1",
 ]
 
 [tool.hatch.version]
