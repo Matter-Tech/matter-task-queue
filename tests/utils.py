@@ -27,6 +27,6 @@ class SqsMock(LocalStackContainer):
 
     def get_aws_endpoint(self):
         host = self.get_container_host_ip()
-        port = self.get_exposed_port(LocalStackContainer.EDGE_PORT)
+        port = self.get_exposed_port(4566)
 
         return f"{host}:{port}"
