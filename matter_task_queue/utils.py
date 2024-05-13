@@ -1,10 +1,11 @@
-import warnings
-import logging
 import asyncio
+import logging
+import warnings
+
 from celery import current_app as current_celery_app
-from celery.signals import worker_process_init, worker_process_shutdown
+
+from .celery_config import CELERY_BEAT_CONFIG, build_celery_config
 from .config import Config
-from .celery_config import build_celery_config, CELERY_BEAT_CONFIG
 
 warnings.filterwarnings("ignore", "SelectableGroups dict interface")
 
@@ -66,10 +67,12 @@ def async_to_sync(func, *args, **kwargs):
 
 
 def create_celery(
-    task_module_paths: [str],
+    task_module_paths: list[str],
     celery_beat_schedule: dict = None,
     create_dead_letter_queue=True,
 ):
+    # TODO pass celery app as an argument
+    # see "Breaking the chain" in https://docs.celeryq.dev/en/stable/userguide/application.html#id4
     celery_app = current_celery_app
     celery_app.conf.update(build_celery_config(create_dead_letter_queue))
     celery_app.conf.update(CELERY_BEAT_CONFIG)
@@ -77,16 +80,3 @@ def create_celery(
     celery_app.autodiscover_tasks(task_module_paths)
 
     return celery_app
-
-
-@worker_process_init.connect()
-def worker_process_init(**kwargs):
-    logging.info("Worker Process Initialization started...")
-    # Optional Process Init Code
-    logging.info("Done Worker Process Initialization.")
-
-
-@worker_process_shutdown.connect()
-def worker_process_shutdown(**kwargs):
-    logging.info(f"Worker process [{kwargs['pid']}] shutdown... -> Exit Code: [{kwargs['exitcode']}]")
-    logging.info("Done worker process shutdown.")
